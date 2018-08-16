@@ -172,6 +172,7 @@ def disconnect_request():
 
 @socketio.on('my_ping', namespace='/test')
 def ping_pong():
+    print('MY PING TEEEEEEST')
     emit('my_pong')
 
 
@@ -194,11 +195,13 @@ def test_disconnect():
     print('Client disconnected', request.sid, userscount)
 
 
-#[ERROR] Socket error processing request.
+# [ERROR] Socket error processing request.
 
-if '1'=='1':
 
+if __name__ == '__main__':
     print('11111111111111111111111111111111111111111111111')
+    print('/n')
+    print('\n')
+    print('n/')
+    print('11111111111111111111111111111111111')
     socketio.run(app, debug=True)
-    print('222222222222222222222222222222222222222222222222222')
-
