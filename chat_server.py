@@ -194,7 +194,11 @@ def test_disconnect():
     print('Client disconnected', request.sid, userscount)
 
 
-if __name__ == '__main__':
-    print('11111111111111111111111111111111111111111111111')
-    socketio.run(app, debug=True)
+#[ERROR] Socket error processing request.
+
+
+
+print('11111111111111111111111111111111111111111111111')
+socketio.run(app, debug=True)
+print('222222222222222222222222222222222222222222222222222')
 
