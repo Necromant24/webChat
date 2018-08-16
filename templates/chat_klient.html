@@ -149,7 +149,8 @@
 
 
 
-            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port+ namespace);
+            //var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port+ namespace);
+            var socket=io.connect('https://kesha-chat.herokuapp.com'+namespace);
             //location.protocol + '//' + document.domain + ':' + location.port + namespace
             //'http://127.0.0.1:5000' + namespace
 
