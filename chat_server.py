@@ -194,7 +194,7 @@ def test_disconnect():
     print('Client disconnected', request.sid, userscount)
 
 
-h = ['0.0.0.0', '127.0.0.1']
+h = ['0.0.0.0']
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host=h[0], port=5000)
+    socketio.run(app, debug=True, host=h[0])
