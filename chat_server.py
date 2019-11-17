@@ -7,6 +7,9 @@ import eventlet
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
+
+# покоже request.sid для каждого конекта индивидуален , к этому можно прикрутить бд с комнатами при выходе брать сид и удалять
+
 async_mode = None
 
 app = Flask(__name__)
@@ -19,6 +22,12 @@ roomscount = 0
 maxroomscount = 5
 userscount = 0
 
+usersdata={}
+
+
+
+
+
 roomstats = {'first': ['password', 'close_close']}
 
 roomlist = ['first', 'second']
@@ -28,7 +37,7 @@ def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
     while True:
-        socketio.sleep(100)
+        socketio.sleep(150)
         count += 1
         socketio.emit('my_response',
                       {'data': 'Server generated event', 'count': count},
@@ -38,7 +47,7 @@ def background_thread():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        if request.form['nick'] != "qqqqqqq":
+        if request.form['nick'] != "":
             nick1 = request.form['nick']
             print(nick1)
             return render_template('chat_klient.html', nick=nick1)
@@ -82,6 +91,12 @@ def create(data):
         roomstats[rname] = [rpassword, rclosepassword]
         emit('nm', {'data': rname}, broadcast=True)
         roomlist.append(rname)
+
+
+
+
+
+        usersdata[request.sid]=rname
 
 
 @socketio.on('roomenter', namespace='/test')
@@ -129,7 +144,7 @@ def close(message):
         if roomstats[rtoclose][1] == cpas:
             close_room(rtoclose)
             emit('my_response', {'data': 'GLOBAL EVENT:' + rtoclose + 'was closed'})
-            emit('delete_room', rtoclose)
+            emit('delete_room', rtoclose,broadcast=True)
             roomlist.remove(rtoclose)
             del roomstats[rtoclose]
             print('roomclosed')
@@ -167,12 +182,19 @@ def disconnect_request():
     emit('my_response',
          {'data': 'Disconnected!', 'count': session['receive_count']})
     print('disconnect')
+    if request.sid in usersdata:
+        rtoclose=usersdata[request.sid]
+        close_room(rtoclose)
+        emit('my_response', {'data': 'GLOBAL EVENT:' + rtoclose + 'was closed after leave'})
+        emit('delete_room', rtoclose, broadcast=True)
+        roomlist.remove(rtoclose)
+        del roomstats[rtoclose]
+        print('closed after leave the chat')
     disconnect()
 
 
 @socketio.on('my_ping', namespace='/test')
 def ping_pong():
-    print('MY PING TEEEEEEST')
     emit('my_pong')
 
 
@@ -185,7 +207,7 @@ def test_connect():
         if thread is None:
             thread = socketio.start_background_task(target=background_thread)
     emit('my_response', {'data': 'Connected', 'count': 0})
-    print(userscount)
+    print(userscount,request.sid)
 
 
 @socketio.on('disconnect', namespace='/test')
@@ -193,15 +215,23 @@ def test_disconnect():
     global userscount
     userscount -= 1
     print('Client disconnected', request.sid, userscount)
+    if request.sid in usersdata:
+        rtoclose=usersdata[request.sid]
+        close_room(rtoclose)
+        emit('my_response', {'data': 'GLOBAL EVENT:' + rtoclose + 'was closed after leave'})
+        emit('delete_room', rtoclose, broadcast=True)
+        roomlist.remove(rtoclose)
+        del roomstats[rtoclose]
+        print('closed after leave the chat')
 
 
 # [ERROR] Socket error processing request.
 
+host=['0.0.0.0','127.0.0.1']
 
 if __name__ == '__main__':
-    print('11111111111111111111111111111111111111111111111')
-    print('/n')
-    print('\n')
-    print('n/')
-    print('11111111111111111111111111111111111')
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True,host=host[0],port=4000)
+
+
+#7137ec7d45b74334b6b01ee8b4e5c0b8
+#7137ec7d45b74334b6b01ee8b4e5c0b8

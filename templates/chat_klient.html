@@ -1,17 +1,12 @@
 <!DOCTYPE HTML>
-
-
 <html>
 <head>
-    <title>Keshas Ultimate Chat Alpha 1.0</title>
+    <title>keshas Chat</title>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.4.2.min.js"></script>
-
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
     <style>
       div.msg_bbl {
         background-color: #ddd;
@@ -25,25 +20,21 @@
       color:#255;
       }
     </style>
-
-
-
 </head>
 <body onunload="alert('do you exit&');">
-
 
 <hr>
 <table width="99%"  align="" border="2">
     <tr>
         <td width="40%">
-            <h1>Ultimate Chat</h1>
+            <h1>Politex Chat</h1>
     <p>Your name is: <b id="nickk">{{nick }}</b></p>
     <p>Average ping/pong latency: <b><span id="ping-pong"></span>ms</b></p>
     <h2>Send:</h2>
 
     <form id="broadcast" method="POST" action='#'>
         <input class="form-control" aria-describedby="helpBlock2" type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
-        <input type="submit" value="Broadcast" class="btn btn-success">
+        <input type="submit" value="send to all" class="btn btn-success">
     </form>
 
     <form id="join" method="POST" action='#'>
@@ -58,20 +49,9 @@
         <input type="text" name="room_data" id="room_data" placeholder="Message">
         <input type="submit" value="Send to Room">
     </form>
-
-
-
-
-
-
-
-
-
 <hr>
             <button onclick="show()">room administrating</button>
             <div id="parent">
-
-
 
             <div id="child">
 
@@ -91,47 +71,33 @@
             </div>
             </div>
 
-
-
-
-
         </td>
         <td>
 
             <div align="right">
                 <img  align="left" src="">
            <img  src="https://img12.postila.ru/resize?w=460&src=%2Fdata%2F90%2Fd2%2Fad%2Fc7%2F90d2adc7647a3b4178f51ec2d599ab27f57d244afd74880219fc9f61e2a307ba.jpg">
-            <p>спонсор дня instagram @semyon_bitcoin(он меня попросил,ничего он не платил)</p>
+            <p>Чат сделан для общения  </p>
             </div>
            please write your nick-name here or change it
 <form>
     <input type="text" id="nick">
 </form>
 
-
         </td>
     </tr>
-
     <tr>
         <td valign="top">
             <h3>room list</h3>
             <ul id="rooms">
-
 </ul>
-
         </td>
-
         <td>
             <h2><div class="form-group has-success"><div class="msg_bb1">Receive:</div> </div></h2>
 <div id="log"></div>
-
         </td>
-
     </tr>
-
-
 </table>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
@@ -143,14 +109,13 @@
         var roomlist=[];
         var haveroom=false;
 
-
             namespace = '/test';
             var tojoin="main";
 
 
-
-            //var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port+ namespace);
-            var socket=io.connect('https://kesha-chat.herokuapp.com'+namespace);
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port+ namespace);
+           // var socket=io.connect('http://3fa3b85e.ngrok.io');
+            //var socket=io.connect('https://kesha-chat.herokuapp.com'+namespace);
             //location.protocol + '//' + document.domain + ':' + location.port + namespace
             //'http://127.0.0.1:5000' + namespace
 
@@ -159,12 +124,9 @@
                 socket.emit('loaddata');
             });
 
-
-
             socket.on('my_response', function(msg) {var newsrc="";
                 $('#log').after('<div class="msg_bbl"><b style="color: #000">Received #' + msg.count + ': ' + msg.data+'</b></div>');
                 var img=msg.data[2]+msg.data[3]+msg.data[4]+msg.data[5]+msg.data[6];
-
 
                 if(img=="https"){
                 for(var i=2;msg.data.length;i++){newsrs.append(msg.data[i]);}
@@ -181,30 +143,17 @@
                 $('#rooms').append('<li id="'+event.data+'">'+event.data+'</li>');
                 roomlist.append(event.data);
 
-                 //$('#rooms').append('<li>'+data.room+'</li>');
+
                 });
 
 
-////???????!!!!!!!
-            //socket.on('load',function(data){   $('#rooms').append('<li>'+'yra'+'</li>');   };
-//??????????!!!!!!
-socket.on('loadd',function(list){roomlist=list;
+socket.on('loadd',function(list){alert('load',list);
   for(var i=0;i<list.length;i++){ $('#rooms').append('<li id="'+list[i]+'">'+list[i]+'</li>');
-  roomlist.append(list[i]);
 
   }
   $('#first').remove();
-  //$('#'+list[0]).remove();
+
   });
-
-
-
-
-
-
-
-
-
 
 
   socket.on('delete_room',function(room)
@@ -217,7 +166,6 @@ socket.on('loadd',function(list){roomlist=list;
     });
 
 
-
 function deleteRoom(room){
 var ul=document.getElementById("rooms");
 var list=ul.childNodes;
@@ -225,11 +173,6 @@ var list=ul.childNodes;
     if(list[i].innerHTML==room){alert("found to del"); $('#'+list[i].innerHTML).remove(); alert(list[i].innerHTML +'was deleted'); }
     }
 };
-
-
-
-
-
 
             var ping_pong_times = [];
             var start_time;
@@ -241,7 +184,7 @@ var list=ul.childNodes;
             socket.on('my_pong', function() {
                 var latency = (new Date).getTime() - start_time;
                 ping_pong_times.push(latency);
-                ping_pong_times = ping_pong_times.slice(-30); // keep last 30 samples
+                ping_pong_times = ping_pong_times.slice(-30);
                 var sum = 0;
                 for (var i = 0; i < ping_pong_times.length; i++)
                     sum += ping_pong_times[i];
@@ -249,24 +192,18 @@ var list=ul.childNodes;
             });
 
 
-
-
-
-
-
-
             $('form#broadcast').submit(function(event) {
             if($('#broadcast_data').val()!=""){
             var niick=document.getElementById("nickk");
             var nnick=niick.innerHTML;
-                socket.emit('mybroadcast_event', {data:'<b>GLOBAL</b>'+nnick+ $('#nick').val()+': '+$('#broadcast_data').val()});
+                socket.emit('mybroadcast_event', {data:'<b>GLOBAL </b>'+nnick+ $('#nick').val()+': '+$('#broadcast_data').val()});
                 $('#broadcast_data').val( '' ).focus();
                 return false;}
                 else{alert("empty"); return false;}
             });
 
             $('form#join').submit(function(event) {
-                //socket.emit('join', {room: $('#join_room').val()});
+
                 socket.emit('roomenter',{rname:$('#join_room').val(),password:$('#join_room_password').val()  });
                 socket.emit('leave', {room: inroom});
                 inroom=$('#join_room').val();
@@ -305,9 +242,6 @@ for(var i=0;i<roomlist.length;i++)
             return false;
 }
 
-
-
-
             $('#create_room').submit(function(event){ alert('creting');
 
             if(inlist()){alert("room with same name already exist");}
@@ -318,10 +252,6 @@ for(var i=0;i<roomlist.length;i++)
             }
             return false;
             });
-
-
-
-
 
           $(window).bind("beforeunload", function() {
     return inFormOrLink ? "Do you really want to close?" : null;
@@ -343,8 +273,6 @@ for(var i=0;i<roomlist.length;i++)
 $(window).on("beforeunload", function() {
 
 })
-
     </script>
 </body>
 </html>
-
